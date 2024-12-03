@@ -23,7 +23,7 @@ def main():
         st.session_state.naive_bayes_params = initial_naive_bayes()
     
     # Load saved params
-    test_columns, m, test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original, test_accuracy, test_precision, test_recall = st.session_state.naive_bayes_params
+    test_columns, m, test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original, test_accuracy, negative_precision, negative_recall, positive_precision, positive_recall = st.session_state.naive_bayes_params
 
     st.markdown(
     """
@@ -80,8 +80,18 @@ def main():
     #model_specs_header = '<h2 class="model-specs">' + "Model Specifications (Naïve Bayes):" + '</h2>'
     #st.write(model_specs_header, unsafe_allow_html=True)
     with st.expander("Model Specifications (Naïve Bayes):"):
-        model_specs = "Model Test Accuracy: " + str(round(test_accuracy*100, 2)) + "%<br>" + "Model Test Precision: " + str(round(test_precision*100, 2)) + "%<br>" + "Model Test Recall: " + str(round(test_recall*100, 2)) + "%<br>"
-    st.markdown(model_specs, unsafe_allow_html=True)
+        #model_specs = "Model Test Accuracy (Negative Sentiment): " + str(round(test_accuracy*100, 2)) + "%<br>" + "Model Test Precision (Negative Sentiment): " + str(round(negative_precision*100, 2)) + "%<br>" + "Model Test Recall (Negative Sentiment): " + str(round(negative_recall*100, 2)) + "%<br><br>"
+        #model_specs += "Model Test Accuracy (Positive Sentiment): " + str(round(test_accuracy*100, 2)) + "%<br>" + "Model Test Precision (Positive Sentiment): " + str(round(positive_precision*100, 2)) + "%<br>" + "Model Test Recall (Positive Sentiment): " + str(round(positive_recall*100, 2)) + "%<br><br>"
+        #st.markdown(model_specs, unsafe_allow_html=True)
+        
+        "Model Test Accuracy: " + str(round(test_accuracy*100, 2))
+        # Build df for display
+        data_header = {
+            "Naïve Bayes (Words Only)": [str(round(negative_precision*100, 2)), str(round(negative_recall*100, 2)), str(round(positive_precision*100, 2)), str(round(positive_recall*100, 2))],
+        }
+        df = pd.DataFrame(data_header, index=["Model Test Precision (Negative Sentiment)", "Model Test Recall (Negative Sentiment)", "Model Test Precision (Positive Sentiment)", "Model Test Recall (Positive Sentiment)"])
+        st.table(df)
+
 
     # User input
     input_string = st.text_area(label = "", height=70)
@@ -290,6 +300,10 @@ def test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_x
     negative_count_correct = 0
     negative_count_predicted = 0
 
+    positive_count_total_real = 0
+    positive_count_correct = 0
+    positive_count_predicted = 0
+
 
     # This is testing
     for index, row in tqdm(df_test.iterrows()):
@@ -320,10 +334,14 @@ def test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_x
         # Evaluating accuracy, precision, and recall
         if (y == 1):
             negative_count_total_real += 1
+        if (y == 0):
+            positive_count_total_real += 1
 
         count_total += 1
         if (y_zero_probability > y_one_probability):
+            positive_count_predicted += 1
             if (y == 0):
+                positive_count_correct += 1
                 count_correct += 1
 
         if (y_one_probability > y_zero_probability):
@@ -334,10 +352,12 @@ def test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_x
     
 
     accuracy = (count_correct / count_total)
-    precision = (negative_count_correct) / (negative_count_predicted)
-    recall = (negative_count_correct) / (negative_count_total_real)
+    negative_precision = (negative_count_correct) / (negative_count_predicted)
+    negative_recall = (negative_count_correct) / (negative_count_total_real)
+    positive_precision = (positive_count_correct) / (positive_count_predicted)
+    positive_recall = (positive_count_correct) / (positive_count_total_real)
 
-    return accuracy, precision, recall
+    return accuracy, negative_precision, negative_recall, positive_precision, positive_recall
 
 
 def initial_naive_bayes():
@@ -358,15 +378,15 @@ def initial_naive_bayes():
 
     # Testing
     map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original = train_naive_bayes(train_csv_file)
-    test_accuracy, precision, recall = test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original)
+    test_accuracy, negative_precision, negative_recall, positive_precision, positive_recall = test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original)
     #print("Test accuracy: " + str(test_accuracy), end="\n\n")
     #print("Test precision: " + str(precision), end="\n\n")
     #print("Test recall: " + str(recall), end="\n\n")
 
     
-    return test_columns, m, test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original, test_accuracy, precision, recall
+    return test_columns, m, test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_xi_zero_y_one, map_xi_one_y_one, y_zero_probability_original, y_one_probability_original, test_accuracy, negative_precision, negative_recall, positive_precision, positive_recall
 
-
+    
 
 # Start by running main
 if __name__ == "__main__":
