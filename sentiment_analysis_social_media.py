@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
+#from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 
 # Tokenization libraries
 import nltk
-#nltk.download('punkt_tab')
-#nltk.download('stopwords')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
 import string
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
