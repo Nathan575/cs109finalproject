@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
+#from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 
 # Tokenization libraries
@@ -195,7 +195,8 @@ def tokenize_csv(csv_file):
     unique_tokens = set()
 
     # Preprocess each review, keep track of unique words
-    for review in tqdm(df['review']):
+    #for review in tqdm(df['review']):
+    for review in df['review']:
         tokens = preprocess_string(review)
         tokenized_reviews.append(tokens)
 
@@ -206,7 +207,8 @@ def tokenize_csv(csv_file):
     unique_tokens = sorted(unique_tokens)
     binary_review_grid =[]
 
-    for current_tokenized_review in tqdm(tokenized_reviews):
+    #for current_tokenized_review in tqdm(tokenized_reviews):
+    for current_tokenized_review in tokenized_reviews:
         binary_review_tokens = []
 
         for token in unique_tokens:
@@ -268,7 +270,8 @@ def train_naive_bayes(train_csv_file):
 
 
     # This is training
-    for index, row in tqdm(df_train.iterrows()):
+    #for index, row in tqdm(df_train.iterrows()):
+    for index, row in df_train.iterrows():
         for i in range(m): # For each feature
 
             column_name = df_train.columns[i]
@@ -306,7 +309,8 @@ def test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_x
 
 
     # This is testing
-    for index, row in tqdm(df_test.iterrows()):
+    #for index, row in tqdm(df_test.iterrows()):
+    for index, row in df_test.iterrows():
         
         y_zero_probability = np.log(y_zero_probability_original)
         y_one_probability = np.log(y_one_probability_original)
