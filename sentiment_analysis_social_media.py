@@ -362,14 +362,14 @@ def test_naive_bayes(test_csv_file, map_xi_zero_y_zero, map_xi_one_y_zero, map_x
 
 def initial_naive_bayes():
     # Build and create Naive Bayes model at the start
-    csv_file = '/Users/ne_mac/Documents/Stanford/Sophomore/CS109/final_project/reviews.csv'
-    tokenize_csv(csv_file)
+    #csv_file = './data/reviews.csv'
+    #tokenize_csv(csv_file)
 
-    csv_file_tokenized = '/Users/ne_mac/Documents/Stanford/Sophomore/CS109/final_project/reviews_cleaned.csv'
-    train_test_tokenize(csv_file_tokenized)
+    #csv_file_tokenized = './data/reviews_cleaned.csv'
+    #train_test_tokenize(csv_file_tokenized)
 
-    train_csv_file = '/Users/ne_mac/Documents/Stanford/Sophomore/CS109/final_project/review_train.csv'
-    test_csv_file = '/Users/ne_mac/Documents/Stanford/Sophomore/CS109/final_project/review_test.csv'
+    train_csv_file = './data/review_train.csv'
+    test_csv_file = './data/review_test.csv'
 
     # For test input runtime optimization
     df_test = pd.read_csv(test_csv_file)
