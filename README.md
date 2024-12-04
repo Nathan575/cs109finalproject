@@ -4,4 +4,4 @@ Demo takes a few seconds to load. Sentiment analysis **_built entirely from the 
 
 ---
 
-**Disclaimer:** _Sentiment classification may be incorrect due to Naive Bayes implementation._
+**Disclaimer:** _Sentiment classification may be incorrect due to Naive Bayes implementation, which is highly limited based on training data samples. Words that have not been seen before lead to a near neutral assumption._
