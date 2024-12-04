@@ -75,7 +75,7 @@ def main():
 
 
     # Applying the custom CSS class to the header
-    st.write('<h1 class="twitter-header">Twitter Sentiment Analysis</h1>', unsafe_allow_html=True)
+    st.write('<h1 class="twitter-header">Twitter Mental Health Sentiment Analysis</h1>', unsafe_allow_html=True)
     # Creating model summary
     #model_specs_header = '<h2 class="model-specs">' + "Model Specifications (Naïve Bayes):" + '</h2>'
     #st.write(model_specs_header, unsafe_allow_html=True)
